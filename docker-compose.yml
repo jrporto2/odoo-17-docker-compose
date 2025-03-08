@@ -45,8 +45,10 @@ services:
     command: --
     environment:
       - HOST=db
-      - USER=${DB_USER} 
+      - USER=${DB_USER}
+      - ADMIN_PASSWORD=${MASTER_PASSWORD}
       - PASSWORD=${DB_PASSWORD}
+      - LOGFILE=/etc/odoo/odoo-server.log
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
