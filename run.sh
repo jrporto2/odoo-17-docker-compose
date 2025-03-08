@@ -8,7 +8,7 @@ git clone --depth=1 https://github.com/jrporto2/odoo-17-docker-compose.git $DEST
 rm -rf $DESTINATION/.git
 
 # Create PostgreSQL directory
-mkdir -p $DESTINATION/postgresql
+# mkdir -p $DESTINATION/postgresql
 
 # Change ownership to current user and set restrictive permissions for security
 sudo chown -R $USER:$USER $DESTINATION
