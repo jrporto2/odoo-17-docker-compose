@@ -44,9 +44,9 @@ services:
     tty: true
     command: --
     environment:
-      #- HOST=db
-      #- USER=odoo
-      - PASSWORD=odoo17@2023
+      - HOST=db
+      - USER=${DB_USER} 
+      - PASSWORD=${DB_PASSWORD}
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
