@@ -1,29 +1,50 @@
-version: '2'
 services:
-  db:
-    image: postgres:16
+  db: 
+    image: postgres:16 
     user: root
+    container_name: c_postgres	
+    hostname: postgres                         # Hostname for the PostgreSQL container	
+    restart: unless-stopped                    # Reinicie el contenedor a menos que se detenga manualmente
+    logging:
+      driver: "json-file"                      # Use the default json-file logging driver
+      options:
+        max-size: "100m"                       # Maximum log file size before rotation (100 MB)
+        max-file: "10"                         # Maximum number of log files to retain (10)
+    security_opt:
+      - no-new-privileges:true                 # Prevent container processes from gaining additional privileges
     environment:
-      - POSTGRES_USER=odoo
-      - POSTGRES_PASSWORD=odoo17@2023
-      - POSTGRES_DB=postgres
-    restart: always             # run as a service
-    volumes:
-        - ./postgresql:/var/lib/postgresql/data
-
+      - POSTGRES_USER=${DB_USER}                     # PostgreSQL user
+      - POSTGRES_PASSWORD=${DB_PASSWORD}          # PostgreSQL password
+      - POSTGRES_DB=${DB_NAME}                  # PostgreSQL database name
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --locale=en_US.UTF-8
+      - PGDATA=/var/lib/postgresql/data/pgdata # Define la ruta donde se almacenarán los datos de PostgreSQL
+    volumes: 
+      - ./odoo-db:/var/lib/postgresql/data
+      - ./custom-init-scripts:/docker-entrypoint-initdb.d
+    ports: 
+      - "5432:5432"
+    healthcheck: 
+      test: 
+        [
+          "CMD-SHELL", 
+          "pg_isready -U ${DB_USER} -d ${DB_NAME}"
+        ]
+      interval: 30s                            # Intervalo entre cada chequeo de salud
+      timeout: 10s                             # Tiempo máximo para esperar una respuesta del chequeo de salud
+      retries: 5                               # Número de intentos antes de considerar que el servicio no está disponible
   odoo17:
     image: odoo:17
     user: root
     depends_on:
       - db
     ports:
-      - "10017:8069"
-      - "20017:8072" # live chat
+      - "${PORT}:8069"                           # Mapea el puerto 8069 del contenedor al puerto 10017 del host
+      - "${CHAT}:8072"                           # Mapea el puerto 8072 del contenedor al puerto 20017 del host (live chat)
     tty: true
     command: --
     environment:
-      - HOST=db
-      - USER=odoo
+      #- HOST=db
+      #- USER=odoo
       - PASSWORD=odoo17@2023
     volumes:
       #- /etc/timezone:/etc/timezone:ro
@@ -32,4 +53,3 @@ services:
       - ./addons:/mnt/extra-addons
       - ./etc:/etc/odoo
     restart: always             # run as a service
-    
