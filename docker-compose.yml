@@ -1,5 +1,5 @@
 services:
-  db: 
+  postgres: 
     image: postgres:16 
     user: root
     container_name: c_postgres	
@@ -32,12 +32,27 @@ services:
       interval: 30s                            # Intervalo entre cada chequeo de salud
       timeout: 10s                             # Tiempo máximo para esperar una respuesta del chequeo de salud
       retries: 5                               # Número de intentos antes de considerar que el servicio no está disponible
+  pgadmin:
+    container_name: c_pgadmin4
+    image: dpage/pgadmin4
+    user: root
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@multipath.com.pe
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_WTF_CSRF_ENABLED: 'False'
+    ports:
+      - "8888:80"
+    volumes:
+      - ./pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - postgres
   odoo17:
     image: odoo:17
     container_name: c_odoo17
     user: root
     depends_on:
-      - db
+      - postgres
     ports:
       - "${PORT}:8069"                           # Mapea el puerto 8069 del contenedor al puerto 10017 del host
       - "${CHAT}:8072"                           # Mapea el puerto 8072 del contenedor al puerto 20017 del host (live chat)
