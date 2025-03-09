@@ -13,7 +13,7 @@ rm -rf $DESTINATION/.git
 # Change ownership to current user and set restrictive permissions for security
 sudo chown -R $USER:$USER $DESTINATION
 sudo chmod -R 700 $DESTINATION  # Only the user has access
-
+sudo chmod +x $DESTINATION/entrypoint.sh
 # Check if running on macOS
 if [[ "$OSTYPE" == "darwin"* ]]; then
   echo "Running on macOS. Skipping inotify configuration."
