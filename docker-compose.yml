@@ -46,7 +46,7 @@ services:
     environment:
       - HOST=db
       - USER=${DB_USER}
-      - ADMIN_PASSWORD=${MASTER_PASSWORD}
+      - ADMIN_PASSWORD=password123
       - PASSWORD=${DB_PASSWORD}
       - LOGFILE=/etc/odoo/odoo-server.log
     volumes:
