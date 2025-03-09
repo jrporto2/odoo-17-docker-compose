@@ -1,7 +1,6 @@
 services:
   postgres: 
     image: postgres:16 
-    user: root
     container_name: c_postgres	
     hostname: postgres                         # Hostname for the PostgreSQL container	
     restart: unless-stopped                    # Reinicie el contenedor a menos que se detenga manualmente
@@ -35,7 +34,6 @@ services:
   pgadmin:
     container_name: c_pgadmin4
     image: dpage/pgadmin4
-    user: root
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@multipath.com.pe
@@ -50,7 +48,6 @@ services:
   odoo17:
     image: odoo:17
     container_name: c_odoo17
-    user: root
     depends_on:
       - postgres
     ports:
@@ -59,7 +56,7 @@ services:
     tty: true
     command: --
     environment:
-      - HOST=db
+      - HOST=postgres
       - USER=${DB_USER}
       - ADMIN_PASSWORD=password123
       - PASSWORD=${DB_PASSWORD}
