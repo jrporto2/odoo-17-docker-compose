@@ -3,7 +3,7 @@
 DESTINATION=$1
 PORT=$2
 CHAT=$3
-MASTERPASSWORD=${4:-admin.passwd}
+MASTERPASSWORD=${4:-adminpasswd}
 # Clone Odoo directory
 git clone --depth=1 https://github.com/jrporto2/odoo-17-docker-compose.git $DESTINATION
 rm -rf $DESTINATION/.git
@@ -37,7 +37,7 @@ else
   # Linux sed syntax
   sed -i 's/10017/'$PORT'/g' $DESTINATION/.env
   sed -i 's/20017/'$CHAT'/g' $DESTINATION/.env
-  sed -i 's/admin.passwd/'$MASTERPASSWORD'/g' $DESTINATION/etc/odoo.conf 
+  sed -i 's/adminpasswd/'$MASTERPASSWORD'/g' $DESTINATION/etc/odoo.conf 
 fi
 
 # Set file and directory permissions after installation
