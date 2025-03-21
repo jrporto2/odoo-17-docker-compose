@@ -83,5 +83,4 @@ services:
       - ./datadrive/nginx/certs:/etc/letsencrypt  # Certificados SSL de Let's Encrypt
     ports:
       - "80:80"
-      - "443:443" # HTTPS
 
