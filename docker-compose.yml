@@ -65,8 +65,8 @@ services:
       - PASSWORD=${DB_PASSWORD}
       - LOGFILE=/etc/odoo/odoo-server.log
     volumes:
-      - ./datadrive/odoo/etc/timezone:/etc/timezone:ro
-      - ./datadrive/odoo/etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       #- ./datadrive/entrypoint.sh:/entrypoint.sh   # if you want to install additional Python packages, uncomment this line!
       #- ./datadrive/odoo_logs:/var/log/odoo
       - ./datadrive/odoo/addons:/mnt/extra-addons
