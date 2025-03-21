@@ -19,8 +19,8 @@ services:
       - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --locale=en_US.UTF-8
       - PGDATA=/var/lib/postgresql/data/pgdata # Define la ruta donde se almacenarán los datos de PostgreSQL
     volumes: 
-      - ./odoo-db:/var/lib/postgresql/data
-      - ./custom-init-scripts:/docker-entrypoint-initdb.d
+      - ./datadrive/postgres/db:/var/lib/postgresql/data
+      - ./datadrive/postgres/custom-init-scripts:/docker-entrypoint-initdb.d
     ports: 
       - "5432:5432"
     healthcheck: 
@@ -41,10 +41,11 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@multipath.com.pe
       PGADMIN_DEFAULT_PASSWORD: admin
       PGADMIN_CONFIG_WTF_CSRF_ENABLED: 'False'
+      SCRIPT_NAME: /pgadmin
     ports:
       - "8888:80"
     volumes:
-      - ./pgadmin-data:/var/lib/pgadmin
+      - ./datadrive/pgadmin/data:/var/lib/pgadmin
     depends_on:
       - postgres
   odoo17:
@@ -64,10 +65,22 @@ services:
       - PASSWORD=${DB_PASSWORD}
       - LOGFILE=/etc/odoo/odoo-server.log
     volumes:
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-      #- ./entrypoint.sh:/entrypoint.sh   # if you want to install additional Python packages, uncomment this line!
-      #- ./odoo_logs:/var/log/odoo
-      - ./addons:/mnt/extra-addons
-      - ./etc:/etc/odoo
+      - ./datadrive/odoo/etc/timezone:/etc/timezone:ro
+      - ./datadrive/odoo/etc/localtime:/etc/localtime:ro
+      #- ./datadrive/entrypoint.sh:/entrypoint.sh   # if you want to install additional Python packages, uncomment this line!
+      #- ./datadrive/odoo_logs:/var/log/odoo
+      - ./datadrive/odoo/addons:/mnt/extra-addons
+      - ./datadrive/odoo/etc:/etc/odoo
     restart: always             # run as a service
+  nginx:
+    image: nginx:latest
+    container_name: c_nginx
+    restart: always
+    volumes:
+      - ./datadrive/nginx/nginx.conf:/etc/nginx/nginx.conf:ro  # Archivo de configuración de Nginx
+      - ./datadrive/nginx/logs:/var/log/nginx  # Carpeta para guardar logs de Nginx
+      - ./datadrive/nginx/certs:/etc/letsencrypt  # Certificados SSL de Let's Encrypt
+    ports:
+      - "80:80"
+      - "443:443" # HTTPS
+
