@@ -11,8 +11,8 @@ rm -rf $DESTINATION/.git
 # mkdir -p $DESTINATION/postgresql
 #copy nginx config
 #sudo scp $DESTINATION/sites-available/odoo.conf /etc/nginx/sites-available/
-mkdir -p $DESTINATION/datadrive/nginx
-sudo scp $DESTINATION/sites-available/odoo.conf $DESTINATION/datadrive/nginx/nginx.conf
+#mkdir -p $DESTINATION/datadrive/nginx
+#sudo scp $DESTINATION/sites-available/odoo.conf $DESTINATION/datadrive/nginx/nginx.conf
 #sudo systemctl reload nginx
 # Change ownership to current user and set restrictive permissions for security
 sudo chown -R $USER:$USER $DESTINATION
