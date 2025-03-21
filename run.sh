@@ -40,7 +40,7 @@ else
   # Linux sed syntax
   sed -i 's/10017/'$PORT'/g' $DESTINATION/.env
   sed -i 's/20017/'$CHAT'/g' $DESTINATION/.env
-  sed -i 's/adminpasswd/'$MASTERPASSWORD'/g' $DESTINATION/etc/odoo.conf 
+  sed -i 's/adminpasswd/'$MASTERPASSWORD'/g' $DESTINATION/datadrive/odoo/etc/odoo.conf 
 fi
 
 # Set file and directory permissions after installation
