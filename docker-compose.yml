@@ -25,7 +25,7 @@ services:
       test: 
         [
           "CMD-SHELL", 
-          "pg_isready -U ${DB_USER} -d ${DB_NAME}" || exit 1"
+          "pg_isready -U ${DB_USER} -d ${DB_NAME} || exit 1"
         ]
       interval: 30s                            # Intervalo entre cada chequeo de salud
       timeout: 5s                             # Tiempo máximo para esperar una respuesta del chequeo de salud
