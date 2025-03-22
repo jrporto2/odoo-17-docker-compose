@@ -83,5 +83,8 @@ services:
       - ./datadrive/nginx/logs:/var/log/nginx  # Carpeta para guardar logs de Nginx
       - ./datadrive/nginx/conf.d:/etc/nginx/conf.d
       - ./datadrive/nginx/certs:/etc/letsencrypt  # Certificados SSL de Let's Encrypt
-    
+    depends_on:
+      - odoo17
+      - pgadmin
+
 
