@@ -31,8 +31,7 @@ services:
       timeout: 5s                             # Tiempo máximo para esperar una respuesta del chequeo de salud
       retries: 3                               # Número de intentos antes de considerar que el servicio no está disponible
       start_period: 10s
-    networks:
-      - default     
+ 
   pgadmin:
     image: dpage/pgadmin4
     container_name: c_pgadmin4
@@ -48,8 +47,7 @@ services:
       - ./datadrive/pgadmin/data:/var/lib/pgadmin
     depends_on:
       - postgres
-    networks:
-      - default      
+   
   odoo17:
     image: odoo:17
     container_name: c_odoo17
@@ -71,8 +69,7 @@ services:
       #- ./datadrive/odoo_logs:/var/log/odoo
       - ./datadrive/odoo/addons:/mnt/extra-addons
       - ./datadrive/odoo/etc:/etc/odoo
-    networks:
-      - default            
+         
     
   nginx:
     image: nginx:latest
@@ -89,8 +86,4 @@ services:
     depends_on:
       - odoo17
       - pgadmin
-    networks:
-      - default
-networks:
-  default:
-    driver: bridge
+
