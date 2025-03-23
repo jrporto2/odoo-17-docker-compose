@@ -7,13 +7,6 @@ MASTERPASSWORD=${4:-adminpasswd}
 # Clone Odoo directory
 git clone --depth=1 https://github.com/jrporto2/odoo-17-docker-compose.git $DESTINATION
 rm -rf $DESTINATION/.git
-# Create PostgreSQL directory
-# mkdir -p $DESTINATION/postgresql
-#copy nginx config
-#sudo scp $DESTINATION/sites-available/odoo.conf /etc/nginx/sites-available/
-#mkdir -p $DESTINATION/datadrive/nginx
-#sudo scp $DESTINATION/sites-available/odoo.conf $DESTINATION/datadrive/nginx/nginx.conf
-#sudo systemctl reload nginx
 # Change ownership to current user and set restrictive permissions for security
 sudo chown -R $USER:$USER $DESTINATION
 sudo chmod -R 700 $DESTINATION  # Only the user has access
