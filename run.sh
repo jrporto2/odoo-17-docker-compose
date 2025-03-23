@@ -7,8 +7,8 @@ MASTERPASSWORD=${4:-adminpasswd}
 # Clone Odoo directory
 git clone --depth=1 https://github.com/jrporto2/odoo-17-docker-compose.git $DESTINATION
 rm -rf $DESTINATION/.git
-#sudo scp /etc/ssl/certs/odoo-selfsigned.crt $DESTINATION/datadrive/nginx/certs/odoo-selfsigned.crt
-#sudo scp /etc/ssl/private/odoo-selfsigned.key $DESTINATION/datadrive/nginx/certs/odoo-selfsigned.key
+sudo scp /etc/ssl/certs/odoo-selfsigned.crt $DESTINATION/datadrive/nginx/certs/odoo-selfsigned.crt
+sudo scp /etc/ssl/private/odoo-selfsigned.key $DESTINATION/datadrive/nginx/certs/odoo-selfsigned.key
 # Change ownership to current user and set restrictive permissions for security
 sudo chown -R $USER:$USER $DESTINATION
 sudo chmod -R 700 $DESTINATION  # Only the user has access
