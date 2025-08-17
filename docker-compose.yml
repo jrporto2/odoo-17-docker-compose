@@ -38,7 +38,8 @@ services:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
       - PGADMIN_CONFIG_WTF_CSRF_ENABLED=False
-      - PGADMIN_LISTEN_PORT=5050   
+      - PGADMIN_LISTEN_PORT=5050
+      - SCRIPT_NAME:/pgadmin
     volumes:
       - ./datadrive/pgadmin/data:/var/lib/pgadmin
     depends_on:
