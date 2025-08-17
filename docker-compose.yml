@@ -2,7 +2,7 @@ services:
   postgres: 
     image: postgres:16 
     container_name: c_postgres
-    user: "999:999"
+    user: root
     hostname: postgres                         # Hostname for the PostgreSQL container	
     restart: unless-stopped                    # Reinicie el contenedor a menos que se detenga manualmente
     environment:
@@ -47,7 +47,7 @@ services:
       - postgres
   odoo17:
     image: odoo:17
-    user: "102:102"
+    user: root
     container_name: c_odoo17
     restart: unless-stopped  
     depends_on:
