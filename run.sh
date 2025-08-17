@@ -9,6 +9,9 @@ MASTERPASSWORD=${4:-adminpasswd}
 git clone --depth=1 https://github.com/jrporto2/odoo-17-docker-compose.git $DESTINATION
 rm -rf $DESTINATION/.git
 mkdir -p $DESTINATION/datadrive/nginx/certs
+mkdir -p $DESTINATION/datadrive/postgres/db
+chown -R 999:999 $DESTINATION/datadrive/postgres/db  # PostgreSQL usa UID/GID 999
+#chmod -R 700 $DESTINATION/datadrive/postgres/db  # Permisos estrictos
 sudo scp /etc/ssl/certs/odoo-selfsigned.crt $DESTINATION/datadrive/nginx/certs/odoo-selfsigned.crt
 sudo scp /etc/ssl/private/odoo-selfsigned.key $DESTINATION/datadrive/nginx/certs/odoo-selfsigned.key
 # Change ownership to current user and set restrictive permissions for security
