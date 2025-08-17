@@ -41,9 +41,6 @@ services:
       - PGADMIN_LISTEN_PORT=5050   
     volumes:
       - ./datadrive/pgadmin/data:/var/lib/pgadmin
-    ports:
-      - "80:80"
-      - "443:443"
     depends_on:
       - postgres
   odoo17:
