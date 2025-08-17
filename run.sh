@@ -10,13 +10,14 @@ git clone --depth=1 https://github.com/jrporto2/odoo-17-docker-compose.git $DEST
 rm -rf $DESTINATION/.git
 mkdir -p $DESTINATION/datadrive/nginx/certs
 mkdir -p $DESTINATION/datadrive/postgres/db
-chown -R 999:999 $DESTINATION/datadrive/postgres/db  # PostgreSQL usa UID/GID 999
-#chmod -R 700 $DESTINATION/datadrive/postgres/db  # Permisos estrictos
+# Change ownership to current user and set restrictive permissions for security
+#sudo chown -R $USER:$USER $DESTINATION
+#sudo chmod -R 700 $DESTINATION  # Only the user has access
+sudo chown -R 102:102 $DESTINATION/datadrive/odoo      # nginx usa UID/GID 101
+sudo chown -R 101:101 $DESTINATION/datadrive/nginx    # nginx usa UID/GID 101
+sudo chown -R 999:999 $DESTINATION/datadrive/postgres # PostgreSQL usa UID/GID 999
 sudo scp /etc/ssl/certs/odoo-selfsigned.crt $DESTINATION/datadrive/nginx/certs/odoo-selfsigned.crt
 sudo scp /etc/ssl/private/odoo-selfsigned.key $DESTINATION/datadrive/nginx/certs/odoo-selfsigned.key
-# Change ownership to current user and set restrictive permissions for security
-sudo chown -R $USER:$USER $DESTINATION
-sudo chmod -R 700 $DESTINATION  # Only the user has access
 sudo chmod +x $DESTINATION/entrypoint.sh
 # Check if running on macOS
 if [[ "$OSTYPE" == "darwin"* ]]; then
