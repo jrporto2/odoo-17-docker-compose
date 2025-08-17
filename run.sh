@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 #curl -s https://raw.githubusercontent.com/jrporto2/odoo-17-docker-compose/refs/heads/master/run.sh | sudo bash -s odoo-one 10017 20017 password
 DESTINATION=$1
 PORT=$2
