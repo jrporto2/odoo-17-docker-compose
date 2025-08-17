@@ -72,7 +72,7 @@ services:
       - ./datadrive/odoo/filestore:/var/lib/odoo/filestore
   nginx:
     image: nginx:latest
-    user:"101:101"
+    user: "101:101"
     container_name: c_nginx
     restart: unless-stopped
     ports:
