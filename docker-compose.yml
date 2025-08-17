@@ -23,6 +23,7 @@ services:
       interval: 30s                            # Intervalo entre cada chequeo de salud
       timeout: 5s                             # Tiempo máximo para esperar una respuesta del chequeo de salud
       retries: 3                               # Número de intentos antes de considerar que el servicio no está disponible
+      start_period: 10s  # Tiempo de gracia para iniciar
   pgadmin:
     image: dpage/pgadmin4
     container_name: c_pgadmin4
