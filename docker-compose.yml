@@ -1,11 +1,4 @@
 services:
-  certbot:
-    image: certbot/certbot
-    container_name: c_certbot
-    volumes:
-      - ./datadrive/nginx/certs:/etc/letsencrypt
-      - ./datadrive/nginx/www:/var/www/html
-    entrypoint: "/bin/sh -c 'sleep 10 && certbot certonly --webroot -w /var/www/html --email TU_EMAIL_AQUI --agree-tos --no-eff-email -d odoo.multipath.net.pe -d dbadmin.multipath.net.pe --force-renewal && trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
   postgres: 
     image: postgres:16 
     container_name: c_postgres
