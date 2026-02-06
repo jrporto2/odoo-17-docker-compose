@@ -16,8 +16,10 @@ sudo chmod -R 700 $DESTINATION  # Only the user has access
 #sudo chown -R 102:102 $DESTINATION/datadrive/odoo      # nginx usa UID/GID 101
 #sudo chown -R 101:101 $DESTINATION/datadrive/nginx    # nginx usa UID/GID 101
 #sudo chown -R 999:999 $DESTINATION/datadrive/postgres # PostgreSQL usa UID/GID 999
-sudo scp /etc/ssl/certs/cloudfalare.pem $DESTINATION/datadrive/nginx/certs/odoo-selfsigned.crt
-sudo scp /etc/ssl/private/cloudfalare.key $DESTINATION/datadrive/nginx/certs/odoo-selfsigned.key
+#sudo scp /etc/ssl/certs/cloudfalare.pem $DESTINATION/datadrive/nginx/certs/odoo-selfsigned.crt
+#sudo scp /etc/ssl/private/cloudfalare.key $DESTINATION/datadrive/nginx/certs/odoo-selfsigned.key
+sudo scp /etc/ssl/certs/origin_certificate.pem $DESTINATION/datadrive/nginx/certs/origin_certificate.pem
+sudo scp /etc/ssl/certs/origin_private_key.pem $DESTINATION/datadrive/nginx/certs/origin_private_key.pem
 sudo chmod +x $DESTINATION/entrypoint.sh
 # Check if running on macOS
 if [[ "$OSTYPE" == "darwin"* ]]; then
