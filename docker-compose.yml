@@ -88,7 +88,7 @@ services:
     volumes:
       - ./datadrive/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./datadrive/nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./datadrive/nginx/ssl:/etc/nginx/ssl:ro
+      - ./datadrive/nginx/certs:/etc/nginx/ssl:ro
       - ./datadrive/nginx/logs:/var/log/nginx
       - ./datadrive/nginx/.htpasswd:/etc/nginx/.htpasswd:ro
     environment:
