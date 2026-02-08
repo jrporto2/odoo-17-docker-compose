@@ -8,16 +8,11 @@ MASTERPASSWORD=${4:-adminpasswd}
 # Clone Odoo directory
 git clone --depth=1 https://github.com/jrporto2/odoo-17-docker-compose.git $DESTINATION
 rm -rf $DESTINATION/.git
-#mkdir -p $DESTINATION/datadrive/nginx/certs
-#mkdir -p $DESTINATION/datadrive/postgres/db
+mkdir -p $DESTINATION/datadrive/postgres/db datadrive/pgadmin/data datadrive/odoo/{addons,etc,filestore,logs}
+mkdir -p $DESTINATION/datadrive/nginx/{certs,conf.d,logs}
 # Change ownership to current user and set restrictive permissions for security
 sudo chown -R $USER:$USER $DESTINATION
 sudo chmod -R 700 $DESTINATION  # Only the user has access
-#sudo chown -R 102:102 $DESTINATION/datadrive/odoo      # nginx usa UID/GID 101
-#sudo chown -R 101:101 $DESTINATION/datadrive/nginx    # nginx usa UID/GID 101
-#sudo chown -R 999:999 $DESTINATION/datadrive/postgres # PostgreSQL usa UID/GID 999
-#sudo scp /etc/ssl/certs/cloudfalare.pem $DESTINATION/datadrive/nginx/certs/odoo-selfsigned.crt
-#sudo scp /etc/ssl/private/cloudfalare.key $DESTINATION/datadrive/nginx/certs/odoo-selfsigned.key
 sudo scp /etc/ssl/certs/origin_certificate.pem $DESTINATION/datadrive/nginx/certs/origin_certificate.pem
 sudo scp /etc/ssl/certs/origin_private_key.pem $DESTINATION/datadrive/nginx/certs/origin_private_key.pem
 sudo chmod +x $DESTINATION/entrypoint.sh
