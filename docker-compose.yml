@@ -15,7 +15,7 @@ services:
       - ./datadrive/postgres/db:/var/lib/postgresql/data
       - ./datadrive/postgres/custom-init-scripts:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} || exit 1"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 3
