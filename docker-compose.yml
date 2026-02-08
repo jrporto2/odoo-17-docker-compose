@@ -25,7 +25,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     container_name: c_pgadmin4
-     user: root
+    user: root
     restart: unless-stopped
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
