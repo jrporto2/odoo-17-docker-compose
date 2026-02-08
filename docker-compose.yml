@@ -2,6 +2,7 @@ services:
   postgres:
     image: postgres:16
     container_name: c_postgres
+    user: root
     hostname: srvpostgres
     restart: unless-stopped
     environment:
@@ -21,16 +22,17 @@ services:
       start_period: 30s
     networks:
       - odoo_network
-
   pgadmin:
     image: dpage/pgadmin4
     container_name: c_pgadmin4
+     user: root
     restart: unless-stopped
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
       - PGADMIN_CONFIG_WTF_CSRF_ENABLED=False
       - PGADMIN_LISTEN_PORT=5050
+      - SCRIPT_NAME=/pgadmin
     volumes:
       - ./datadrive/pgadmin/data:/var/lib/pgadmin
     depends_on:
@@ -40,9 +42,9 @@ services:
       - odoo_network
     expose:
       - "5050"
-
   odoo17:
-    image: odoo:17.0
+    image: odoo:17
+    user: root
     container_name: c_odoo17
     restart: unless-stopped
     depends_on:
@@ -51,10 +53,12 @@ services:
     environment:
       - TZ=America/Lima
       - LANG=es_PE.UTF-8
-      - HOST=srvodoo
+      - HOST=postgres
       - USER=${DB_USER}
       - PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
+      - LOGFILE=/etc/odoo/odoo-server.log
+      - FILESTORE_PATH=/var/lib/odoo/filestore
       - ODOO_POOL_SIZE=${ODOO_POOL_SIZE:-20}
       - ODOO_MAX_CRON_THREADS=${ODOO_MAX_CRON_THREADS:-2}
       - ODOO_WORKERS=${ODOO_WORKERS:-4}
@@ -64,7 +68,6 @@ services:
       - ./datadrive/odoo/addons:/mnt/extra-addons
       - ./datadrive/odoo/etc:/etc/odoo:ro
       - ./datadrive/odoo/filestore:/var/lib/odoo/filestore
-      - ./datadrive/odoo/logs:/var/log/odoo
     expose:
       - "8069"
       - "8072"
@@ -76,9 +79,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 120s
-
   nginx:
     image: nginx:alpine
+    user: root
     container_name: c_nginx
     restart: unless-stopped
     ports:
@@ -108,7 +111,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-
 networks:
   odoo_network:
     driver: bridge
