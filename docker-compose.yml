@@ -55,7 +55,7 @@ services:
       - LANG=es_PE.UTF-8
       - HOST=postgres
       - USER=${POSTGRES_USER}
-      - PASSWORD=${‎POSTGRES_PASSWORD}
+      - PASSWORD=${POSTGRES_PASSWORD}
       - DB_NAME=${POSTGRES_DB}
       - LOGFILE=/etc/odoo/odoo-server.log
       - FILESTORE_PATH=/var/lib/odoo/filestore
