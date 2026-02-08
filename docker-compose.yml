@@ -12,7 +12,7 @@ services:
       - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --locale=en_US.UTF-8
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./datadrive/postgres/db:/var/lib/postgresql/data
       - ./datadrive/postgres/custom-init-scripts:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER} || exit 1"]
@@ -33,7 +33,7 @@ services:
       - PGADMIN_CONFIG_WTF_CSRF_ENABLED=False
       - PGADMIN_LISTEN_PORT=5050
     volumes:
-      - pgadmin_data:/var/lib/pgadmin
+      - ./datadrive/pgadmin/data:/var/lib/pgadmin
     depends_on:
       postgres:
         condition: service_healthy
@@ -43,7 +43,7 @@ services:
       - "5050"
 
   odoo17:
-    image: odoo:17
+    image: odoo:17.0
     container_name: c_odoo17
     restart: unless-stopped
     depends_on:
@@ -64,7 +64,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./datadrive/odoo/addons:/mnt/extra-addons
       - ./datadrive/odoo/etc:/etc/odoo:ro
-      - odoo_filestore:/var/lib/odoo/filestore
+      - ./datadrive/odoo/filestore:/var/lib/odoo/filestore
       - ./datadrive/odoo/logs:/var/log/odoo
     expose:
       - "8069"
@@ -109,14 +109,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-
-volumes:
-  postgres_data:
-    driver: local
-  odoo_filestore:
-    driver: local
-  pgadmin_data:
-    driver: local
 
 networks:
   odoo_network:
