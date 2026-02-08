@@ -15,7 +15,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./datadrive/postgres/custom-init-scripts:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-odoo} || exit 1"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -53,9 +53,9 @@ services:
       - TZ=America/Lima
       - LANG=es_PE.UTF-8
       - HOST=postgres
-      - USER=${DB_USER:-odoo}
-      - PASSWORD=${DB_PASSWORD:-odoo}
-      - DB_NAME=${DB_NAME:-odoo_prod}
+      - USER=${DB_USER}
+      - PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
       - ODOO_POOL_SIZE=${ODOO_POOL_SIZE:-20}
       - ODOO_MAX_CRON_THREADS=${ODOO_MAX_CRON_THREADS:-2}
       - ODOO_WORKERS=${ODOO_WORKERS:-4}
