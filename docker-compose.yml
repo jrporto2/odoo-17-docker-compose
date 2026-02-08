@@ -2,8 +2,7 @@ services:
   postgres:
     image: postgres:16
     container_name: c_postgres
-    user: "postgres"
-    hostname: postgres
+    hostname: srvpostgres
     restart: unless-stopped
     environment:
       - POSTGRES_USER=${DB_USER}
@@ -52,7 +51,7 @@ services:
     environment:
       - TZ=America/Lima
       - LANG=es_PE.UTF-8
-      - HOST=postgres
+      - HOST=srvodoo
       - USER=${DB_USER}
       - PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
