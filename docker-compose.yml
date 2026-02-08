@@ -35,9 +35,9 @@ services:
       - SCRIPT_NAME=/pgadmin
     volumes:
       - ./datadrive/pgadmin/data:/var/lib/pgadmin
-    depends_on:
-      postgres:
-        condition: service_healthy
+    #depends_on:
+    #  postgres:
+    #    condition: service_healthy
     networks:
       - odoo_network
     expose:
@@ -98,11 +98,11 @@ services:
       - NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx/conf.d
       - NGINX_WORKER_PROCESSES=auto
       - NGINX_WORKER_CONNECTIONS=4096
-    depends_on:
-      odoo17:
-        condition: service_healthy
-      pgadmin:
-        condition: service_started
+    #depends_on:
+    #  odoo17:
+    #    condition: service_healthy
+    #  pgadmin:
+    #    condition: service_started
     networks:
       - odoo_network
     healthcheck:
