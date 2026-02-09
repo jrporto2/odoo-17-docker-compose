@@ -64,7 +64,7 @@ services:
       - ./datadrive/odoo/etc:/etc/odoo
       - ./datadrive/odoo/filestore:/var/lib/odoo/filestore  #attach files
   nginx:
-    image: nginx:latest
+    image: nginx:1.26.1
     user: root
     container_name: c_nginx
     restart: unless-stopped
