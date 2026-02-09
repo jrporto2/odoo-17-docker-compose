@@ -30,11 +30,6 @@ services:
     user: root
     restart: unless-stopped
     environment:
-      #PGADMIN_DEFAULT_EMAIL: admin@multipath.com.pe
-      #PGADMIN_DEFAULT_PASSWORD: admin
-      #PGADMIN_CONFIG_WTF_CSRF_ENABLED: 'False'
-      #PGADMIN_LISTEN_PORT: 80
-      #SCRIPT_NAME: /pgadmin
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
       - PGADMIN_CONFIG_WTF_CSRF_ENABLED=False
@@ -65,10 +60,9 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       #- ./datadrive/entrypoint.sh:/entrypoint.sh   # if you want to install additional Python packages, uncomment this line!
-      #- ./datadrive/odoo_logs:/var/log/odoo
       - ./datadrive/odoo/addons:/mnt/extra-addons
       - ./datadrive/odoo/etc:/etc/odoo
-      - ./datadrive/odoo/filestore:/var/lib/odoo/filestore
+      - ./datadrive/odoo/filestore:/var/lib/odoo/filestore  #attach files
   nginx:
     image: nginx:latest
     user: root
