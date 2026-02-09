@@ -65,7 +65,6 @@ services:
       - ./datadrive/odoo/filestore:/var/lib/odoo/filestore  #attach files
   nginx:
     image: nginx:1.26.1
-    user: nginx
     container_name: c_nginx
     restart: unless-stopped
     ports:
