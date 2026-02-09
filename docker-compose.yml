@@ -3,7 +3,6 @@ services:
     image: postgres:16
     container_name: c_postgres
     user: root
-    hostname: srvpostgres
     restart: unless-stopped
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
@@ -13,7 +12,7 @@ services:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - ./datadrive/postgres/db:/var/lib/postgresql/data
-      - ./datadrive/postgres/custom-init-scripts:/docker-entrypoint-initdb.d:ro
+      #- ./datadrive/postgres/custom-init-scripts:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} || exit 1"]
       interval: 30s
@@ -66,7 +65,7 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - ./datadrive/odoo/addons:/mnt/extra-addons
-      - ./datadrive/odoo/etc:/etc/odoo:ro
+      #- ./datadrive/odoo/etc:/etc/odoo:ro
       - ./datadrive/odoo/filestore:/var/lib/odoo/filestore
     expose:
       - "8069"
