@@ -5,6 +5,8 @@ DESTINATION=$1
 PORT=$2
 CHAT=$3
 MASTERPASSWORD=${4:-adminpasswd}
+#clear directory
+rm -rf $DESTINATION
 # Clone Odoo directory
 git clone --depth=1 https://github.com/jrporto2/odoo-17-docker-compose.git $DESTINATION
 rm -rf $DESTINATION/.git
