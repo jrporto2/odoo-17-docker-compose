@@ -49,6 +49,9 @@ fi
 find $DESTINATION -type f -exec chmod 644 {} \;
 find $DESTINATION -type d -exec chmod 755 {} \;
 
+sudo chown -R 999:999 datadrive/postgres/db
+sudo chmod 700 datadrive/
+
 # Run Odoo
 docker compose -f $DESTINATION/docker-compose.yml up -d
 
