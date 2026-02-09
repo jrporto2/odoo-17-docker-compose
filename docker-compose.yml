@@ -2,7 +2,7 @@ services:
   postgres: 
     image: postgres:16 
     container_name: c_postgres
-    user: root
+    user: postgres
     hostname: postgres                         # Hostname for the PostgreSQL container	
     restart: unless-stopped                    # Reinicie el contenedor a menos que se detenga manualmente
     environment:
