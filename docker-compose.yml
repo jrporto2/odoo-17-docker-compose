@@ -1,6 +1,8 @@
+version: "3.9"
+
 services:
-  postgres: 
-    image: postgres:16 
+  postgres:
+    image: postgres:16
     container_name: c_postgres
     restart: unless-stopped
     environment:
@@ -9,22 +11,21 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --locale=en_US.UTF-8
       - PGDATA=/var/lib/postgresql/data/pgdata
-    volumes: 
+    volumes:
       - ./datadrive/postgres/db:/var/lib/postgresql/data
       - ./datadrive/postgres/custom-init-scripts:/docker-entrypoint-initdb.d
-    healthcheck: 
+    healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME} || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 10s
     networks:
-     - internal_net
+      - internal_net
 
   pgadmin:
     image: dpage/pgadmin4
     container_name: c_pgadmin4
-    # user: pgadmin  # recomendado eliminar para evitar problemas de permisos
     restart: unless-stopped
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
@@ -38,19 +39,20 @@ services:
       postgres:
         condition: service_healthy
     networks:
-     - internal_net
+      - internal_net
+
   odoo17:
     image: odoo:17
     container_name: c_odoo17
     user: odoo
-    restart: unless-stopped  
+    restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
     environment:
       - TZ=America/Lima
       - LANG=es_PE.UTF-8
-      - HOST=postgres           # Odoo usará este hostname para DB
+      - HOST=postgres
       - USER=${DB_USER}
       - PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
@@ -63,14 +65,9 @@ services:
       - ./datadrive/odoo/addons:/mnt/extra-addons
       - ./datadrive/odoo/etc:/etc/odoo
       - ./datadrive/odoo/filestore:/var/lib/odoo/filestore
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8069/web/login >/dev/null 2>&1 || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 20s
     networks:
-     - internal_net
+      - internal_net
+
   nginx:
     image: nginx:1.26.1
     container_name: c_nginx
@@ -85,12 +82,13 @@ services:
       - ./datadrive/nginx/certs:/etc/nginx/ssl
     depends_on:
       odoo17:
-        condition: service_healthy
+        condition: service_started
     networks:
-     - internal_net
-     - public_net
- networks:
-   internal_net:
+      - internal_net
+      - public_net
+
+networks:
+  internal_net:
     internal: true
-   public_net:
+  public_net:
     driver: bridge
