@@ -2,32 +2,29 @@ services:
   postgres: 
     image: postgres:16 
     container_name: c_postgres
-    user: postgres
-    hostname: postgres                         # Hostname for the PostgreSQL container	
-    restart: unless-stopped                    # Reinicie el contenedor a menos que se detenga manualmente
+    restart: unless-stopped
     environment:
-      - POSTGRES_USER=${DB_USER}                     # PostgreSQL user
-      - POSTGRES_PASSWORD=${DB_PASSWORD}          # PostgreSQL password
-      - POSTGRES_DB=${DB_NAME}                  # PostgreSQL database name
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
       - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --locale=en_US.UTF-8
-      - PGDATA=/var/lib/postgresql/data/pgdata # Define la ruta donde se almacenarán los datos de PostgreSQL
+      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes: 
       - ./datadrive/postgres/db:/var/lib/postgresql/data
       - ./datadrive/postgres/custom-init-scripts:/docker-entrypoint-initdb.d
     healthcheck: 
-      test: 
-        [
-          "CMD-SHELL", 
-          "pg_isready -U ${DB_USER} -d ${DB_NAME} || exit 1"
-        ]
-      interval: 30s                            # Intervalo entre cada chequeo de salud
-      timeout: 5s                             # Tiempo máximo para esperar una respuesta del chequeo de salud
-      retries: 3                               # Número de intentos antes de considerar que el servicio no está disponible
-      start_period: 10s  # Tiempo de gracia para iniciar
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME} || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+     - internal_net
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: c_pgadmin4
-    user: pgadmin
+    # user: pgadmin  # recomendado eliminar para evitar problemas de permisos
     restart: unless-stopped
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
@@ -38,19 +35,22 @@ services:
     volumes:
       - ./datadrive/pgadmin/data:/var/lib/pgadmin
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+    networks:
+     - internal_net
   odoo17:
     image: odoo:17
-    user: odoo
     container_name: c_odoo17
+    user: odoo
     restart: unless-stopped  
     depends_on:
       postgres:
         condition: service_healthy
     environment:
-      - TZ=America/Lima  # Zona horaria de Perú (GMT-5)
-      - LANG=es_PE.UTF-8  # Configuración regional para Perú
-      - HOST=postgres
+      - TZ=America/Lima
+      - LANG=es_PE.UTF-8
+      - HOST=postgres           # Odoo usará este hostname para DB
       - USER=${DB_USER}
       - PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
@@ -59,10 +59,18 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      #- ./datadrive/entrypoint.sh:/entrypoint.sh   # if you want to install additional Python packages, uncomment this line!
+      # - ./datadrive/entrypoint.sh:/entrypoint.sh
       - ./datadrive/odoo/addons:/mnt/extra-addons
       - ./datadrive/odoo/etc:/etc/odoo
-      - ./datadrive/odoo/filestore:/var/lib/odoo/filestore  #attach files
+      - ./datadrive/odoo/filestore:/var/lib/odoo/filestore
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8069/web/login >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    networks:
+     - internal_net
   nginx:
     image: nginx:1.26.1
     container_name: c_nginx
@@ -71,10 +79,18 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./datadrive/nginx/nginx.conf:/etc/nginx/nginx.conf:ro  # Archivo de configuración de Nginx
-      - ./datadrive/nginx/logs:/var/log/nginx  # Carpeta para guardar logs de Nginx
+      - ./datadrive/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./datadrive/nginx/logs:/var/log/nginx
       - ./datadrive/nginx/conf.d:/etc/nginx/conf.d
-      - ./datadrive/nginx/certs:/etc/nginx/ssl  # Certificados SSL de Let's Encrypt
+      - ./datadrive/nginx/certs:/etc/nginx/ssl
     depends_on:
-      - odoo17
-
+      odoo17:
+        condition: service_healthy
+    networks:
+     - internal_net
+     - public_net
+ networks:
+   internal_net:
+    internal: true
+   public_net:
+    driver: bridge
